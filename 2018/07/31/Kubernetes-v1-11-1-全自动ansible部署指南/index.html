@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="kubernetes,ipvs," />
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="青木的博客">
-<meta property="og:url" content="https://www.qingmu.io/index.html">
+<meta name="description" content="本文目标 部署3节点的高可用master(v1.11.1目前最新版)+3个worker node 节点 整个集群使用static pod方式启动包括 使用ipvs替代iptables 容器部署flannel插件，coredns插件等相关插件  使用软件版本   软件名称 版本     os centos 7.x （3.10.0-862.9.1.el7.x86_64）   etcd v3.2.18">
+<meta name="keywords" content="kubernetes,ipvs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes-v1.11.1-全自动ansible部署指南">
+<meta property="og:url" content="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/index.html">
 <meta property="og:site_name" content="青木的博客">
+<meta property="og:description" content="本文目标 部署3节点的高可用master(v1.11.1目前最新版)+3个worker node 节点 整个集群使用static pod方式启动包括 使用ipvs替代iptables 容器部署flannel插件，coredns插件等相关插件  使用软件版本   软件名称 版本     os centos 7.x （3.10.0-862.9.1.el7.x86_64）   etcd v3.2.18">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-31T11:08:33.185Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="青木的博客">
+<meta name="twitter:title" content="Kubernetes-v1.11.1-全自动ansible部署指南">
+<meta name="twitter:description" content="本文目标 部署3节点的高可用master(v1.11.1目前最新版)+3个worker node 节点 整个集群使用static pod方式启动包括 使用ipvs替代iptables 容器部署flannel插件，coredns插件等相关插件  使用软件版本   软件名称 版本     os centos 7.x （3.10.0-862.9.1.el7.x86_64）   etcd v3.2.18">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://www.qingmu.io/"/>
+  <link rel="canonical" href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/"/>
 
 
 
 
 
-  <title>青木的博客</title>
+  <title>Kubernetes-v1.11.1-全自动ansible部署指南 | 青木的博客</title>
   
 
 
@@ -140,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +218,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/" itemprop="url">Kubernetes-v1.11.1-全自动ansible部署指南</a></h1>
+          <h1 class="post-title" itemprop="name headline">Kubernetes-v1.11.1-全自动ansible部署指南</h1>
         
 
         <div class="post-meta">
@@ -298,9 +300,7 @@
       
 
       
-        
-          
-            <h2 id="本文目标"><a href="#本文目标" class="headerlink" title="本文目标"></a>本文目标</h2><ul>
+        <h2 id="本文目标"><a href="#本文目标" class="headerlink" title="本文目标"></a>本文目标</h2><ul>
 <li>部署3节点的高可用master(v1.11.1目前最新版)+3个worker node 节点</li>
 <li>整个集群使用static pod方式启动包括</li>
 <li>使用ipvs替代iptables</li>
@@ -367,8 +367,6 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /etc/docker/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">"registry-mirrors": ["https://xxxx.mirror.aliyuncs.com"]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">'</span> &gt; /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
 
-          
-        
       
     </div>
     
@@ -383,14 +381,22 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
+          
+            <a href="/tags/ipvs/" rel="tag"># ipvs</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -400,10 +406,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -411,6 +418,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -431,8 +442,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -497,6 +517,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本文目标"><span class="nav-number">1.</span> <span class="nav-text">本文目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用软件版本"><span class="nav-number">1.1.</span> <span class="nav-text">使用软件版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境准备-以下操作请在每一台主机执行，请确保使用root用户"><span class="nav-number">2.</span> <span class="nav-text">环境准备(以下操作请在每一台主机执行，请确保使用root用户)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux环境设置"><span class="nav-number">2.1.</span> <span class="nav-text">linux环境设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-安装"><span class="nav-number">2.2.</span> <span class="nav-text">docker 安装</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -637,6 +673,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
