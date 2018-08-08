@@ -112,18 +112,18 @@
 
 
 
-  <meta name="description" content="目标 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像">
-<meta name="keywords" content="微服务,docker">
+  <meta name="description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
+<meta name="keywords" content="docker,微服务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用docker运行spring-cloud应用">
 <meta property="og:url" content="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/index.html">
 <meta property="og:site_name" content="青木的博客">
-<meta property="og:description" content="目标 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像">
+<meta property="og:description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-08T10:35:04.348Z">
+<meta property="og:updated_time" content="2018-08-08T11:06:39.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用docker运行spring-cloud应用">
-<meta name="twitter:description" content="目标 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像">
+<meta name="twitter:description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 
 
 
@@ -344,7 +344,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-08 18:35:04" itemprop="dateModified" datetime="2018-08-08T18:35:04+08:00">2018-08-08</time>
+                <time title="修改时间：2018-08-08 19:06:39" itemprop="dateModified" datetime="2018-08-08T19:06:39+08:00">2018-08-08</time>
               
             
           </span>
@@ -398,10 +398,42 @@
       
 
       
-        <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><ul>
+        <h1 id="目标（一下镜像均在生产使用）"><a href="#目标（一下镜像均在生产使用）" class="headerlink" title="目标（一下镜像均在生产使用）"></a>目标（一下镜像均在生产使用）</h1><ul>
 <li>自定义Dockerfile构建一个生产可用的jre base image</li>
 <li>配置maven docker 打包发布插件完成从源码的打包fat jar-&gt; build  docker image -&gt; push image</li>
 <li>使用docker运行打包完成的镜像</li>
+</ul>
+<h1 id="构建一个jre镜像"><a href="#构建一个jre镜像" class="headerlink" title="构建一个jre镜像"></a>构建一个jre镜像</h1><ul>
+<li>首先我们对这个镜像有如下要求</li>
+</ul>
+<ol>
+<li>镜像比如要足够小（必须在100M以内）</li>
+<li>字符集必须要支持中文，不然就乱码了</li>
+<li>时区必须要是UTC+8</li>
+<li>必须要有字体支持，因为我会的excel导出会抛出错误</li>
+<li>还得支持下imagemagick。</li>
+</ol>
+<a id="more"></a>
+<ul>
+<li>基于以上要求我们构建出一下镜像</li>
+<li>首先使用apline作为基础镜像足够小只有5M</li>
+<li>由于alpine自带支持中文的字符集，这里我们只需要将LANG设置为C.UTF-8即可完美的支持中文。</li>
+<li>国内软件源首选阿里云啦，顺道配置一下阿里云的镜像源，加速我们的镜像构建速度</li>
+<li>配置UTC+8时区需要安装tzdata，安装完成之后配置一下即可。</li>
+<li>构建出的镜像大小为57M，对你没有看错 是java 是 57M</li>
+<li>目前alpine携带JDK版本为1.80_171</li>
+</ul>
+<h1 id="Jre-base-image-57M"><a href="#Jre-base-image-57M" class="headerlink" title="Jre base image(57M)"></a>Jre base image(57M)</h1><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如不想自己构建 可使用我构建好的</span></span><br><span class="line"><span class="comment"># dokcer pull docker pull freemanliu/openjre</span></span><br><span class="line"><span class="keyword">FROM</span> alpine:<span class="number">3.8</span></span><br><span class="line"><span class="keyword">ENV</span> LANG=C.UTF-<span class="number">8</span> \</span><br><span class="line">    JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span>-openjdk/jre \</span><br><span class="line">    PATH=$PATH:/usr/lib/jvm/java-<span class="number">1.8</span>-openjdk/jre/bin:/usr/lib/jvm/java-<span class="number">1.8</span>-openjdk/bin \</span><br><span class="line">    TZ=Asia/Shanghai</span><br><span class="line"><span class="keyword">RUN</span> echo "" &gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; echo "https://mirrors.aliyun.com/alpine/v3.8/main/" &gt;&gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; echo "https://mirrors.aliyun.com/alpine/v3.8/community/" &gt;&gt; /etc/apk/repositories \</span><br><span class="line">&amp;&amp; apk update &amp;&amp; apk add openjdk8-jre ca-certificates tzdata &amp;&amp; rm -rf /var/cache/apk/* \</span><br><span class="line">&amp;&amp; ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &amp;&amp; echo $TZ &gt; /etc/timezone</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如遇到到处excel的服务呀，进行excel导出时，上面最基础的jre镜像会抛出异常，这时需要安装一下字体</li>
+</ul>
+<h1 id="Jre-image-include-font-68M"><a href="#Jre-image-include-font-68M" class="headerlink" title="Jre  image include  font(68M)"></a>Jre  image include  font(68M)</h1><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如不想自己构建 可使用我构建好的</span></span><br><span class="line"><span class="comment"># dokcer pull freemanliu/openjre:1.8.0_171_font</span></span><br><span class="line"><span class="keyword">FROM</span> freemanliu/openjre:<span class="number">1.8</span>.<span class="number">0</span>_171</span><br><span class="line"><span class="keyword">RUN</span> apk update &amp;&amp; apk add  ttf-dejavu &amp;&amp; rm -rf /var/cache/apk/*</span><br></pre></td></tr></table></figure>
+<h1 id="Jre-image-include-font-and-imagemagick-99M"><a href="#Jre-image-include-font-and-imagemagick-99M" class="headerlink" title="Jre  image include  font and imagemagick(99M)"></a>Jre  image include  font and imagemagick(99M)</h1><ul>
+<li>包含imagegick的镜像</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># freemanliu/openjre:1.8.0_171_im</span></span><br><span class="line"><span class="keyword">FROM</span> freemanliu/openjre:<span class="number">1.8</span>.<span class="number">0</span>_171_font</span><br><span class="line"><span class="keyword">RUN</span> apk update &amp;&amp; apk add imagemagick font-adobe-100dpi fontconfig  &amp;&amp; rm -rf /var/cache/apk/*</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们构建除了完全满足我们需求的镜像，是不是美滋滋啊。接下来就配置maven插件来帮助我们构建application的image啦。</li>
 </ul>
 
       
@@ -423,9 +455,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/微服务/" rel="tag"># 微服务</a>
-          
             <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
           
         </div>
       
@@ -619,7 +651,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标"><span class="nav-number">1.</span> <span class="nav-text">目标</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标（一下镜像均在生产使用）"><span class="nav-number">1.</span> <span class="nav-text">目标（一下镜像均在生产使用）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构建一个jre镜像"><span class="nav-number">2.</span> <span class="nav-text">构建一个jre镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-base-image-57M"><span class="nav-number">3.</span> <span class="nav-text">Jre base image(57M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-68M"><span class="nav-number">4.</span> <span class="nav-text">Jre  image include  font(68M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-and-imagemagick-99M"><span class="nav-number">5.</span> <span class="nav-text">Jre  image include  font and imagemagick(99M)</span></a></li></ol></div>
             
 
           </div>

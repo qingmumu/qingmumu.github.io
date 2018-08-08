@@ -344,7 +344,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-08 18:35:04" itemprop="dateModified" datetime="2018-08-08T18:35:04+08:00">2018-08-08</time>
+                <time title="修改时间：2018-08-08 19:06:39" itemprop="dateModified" datetime="2018-08-08T19:06:39+08:00">2018-08-08</time>
               
             
           </span>
@@ -399,14 +399,28 @@
 
       
         
-          
-            <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><ul>
+          <h1 id="目标（一下镜像均在生产使用）"><a href="#目标（一下镜像均在生产使用）" class="headerlink" title="目标（一下镜像均在生产使用）"></a>目标（一下镜像均在生产使用）</h1><ul>
 <li>自定义Dockerfile构建一个生产可用的jre base image</li>
 <li>配置maven docker 打包发布插件完成从源码的打包fat jar-&gt; build  docker image -&gt; push image</li>
 <li>使用docker运行打包完成的镜像</li>
 </ul>
-
-          
+<h1 id="构建一个jre镜像"><a href="#构建一个jre镜像" class="headerlink" title="构建一个jre镜像"></a>构建一个jre镜像</h1><ul>
+<li>首先我们对这个镜像有如下要求</li>
+</ul>
+<ol>
+<li>镜像比如要足够小（必须在100M以内）</li>
+<li>字符集必须要支持中文，不然就乱码了</li>
+<li>时区必须要是UTC+8</li>
+<li>必须要有字体支持，因为我会的excel导出会抛出错误</li>
+<li>还得支持下imagemagick。</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/07/使用docker运行spring-cloud应用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
