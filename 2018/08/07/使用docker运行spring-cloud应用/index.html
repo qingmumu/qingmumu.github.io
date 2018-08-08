@@ -112,18 +112,18 @@
 
 
 
-  <meta name="description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
+  <meta name="description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta name="keywords" content="docker,微服务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用docker运行spring-cloud应用">
 <meta property="og:url" content="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/index.html">
 <meta property="og:site_name" content="青木的博客">
-<meta property="og:description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
+<meta property="og:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-08T11:54:09.087Z">
+<meta property="og:updated_time" content="2018-08-08T12:03:23.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用docker运行spring-cloud应用">
-<meta name="twitter:description" content="目标（一下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
+<meta name="twitter:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 
 
 
@@ -344,7 +344,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-08 19:54:09" itemprop="dateModified" datetime="2018-08-08T19:54:09+08:00">2018-08-08</time>
+                <time title="修改时间：2018-08-08 20:03:23" itemprop="dateModified" datetime="2018-08-08T20:03:23+08:00">2018-08-08</time>
               
             
           </span>
@@ -398,7 +398,7 @@
       
 
       
-        <h1 id="目标（一下镜像均在生产使用）"><a href="#目标（一下镜像均在生产使用）" class="headerlink" title="目标（一下镜像均在生产使用）"></a>目标（一下镜像均在生产使用）</h1><ul>
+        <h1 id="目标（以下镜像均在生产使用）"><a href="#目标（以下镜像均在生产使用）" class="headerlink" title="目标（以下镜像均在生产使用）"></a>目标（以下镜像均在生产使用）</h1><ul>
 <li>自定义Dockerfile构建一个生产可用的jre base image</li>
 <li>配置maven docker 打包发布插件完成从源码的打包fat jar-&gt; build  docker image -&gt; push image</li>
 <li>使用docker运行打包完成的镜像</li>
@@ -677,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标（一下镜像均在生产使用）"><span class="nav-number">1.</span> <span class="nav-text">目标（一下镜像均在生产使用）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构建一个jre镜像"><span class="nav-number">2.</span> <span class="nav-text">构建一个jre镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-base-image-57M"><span class="nav-number">3.</span> <span class="nav-text">Jre base image(57M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-68M"><span class="nav-number">4.</span> <span class="nav-text">Jre  image include  font(68M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-and-imagemagick-99M"><span class="nav-number">5.</span> <span class="nav-text">Jre  image include  font and imagemagick(99M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置maven插件"><span class="nav-number">6.</span> <span class="nav-text">配置maven插件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标（以下镜像均在生产使用）"><span class="nav-number">1.</span> <span class="nav-text">目标（以下镜像均在生产使用）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#构建一个jre镜像"><span class="nav-number">2.</span> <span class="nav-text">构建一个jre镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-base-image-57M"><span class="nav-number">3.</span> <span class="nav-text">Jre base image(57M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-68M"><span class="nav-number">4.</span> <span class="nav-text">Jre  image include  font(68M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jre-image-include-font-and-imagemagick-99M"><span class="nav-number">5.</span> <span class="nav-text">Jre  image include  font and imagemagick(99M)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置maven插件"><span class="nav-number">6.</span> <span class="nav-text">配置maven插件</span></a></li></ol></div>
             
 
           </div>
