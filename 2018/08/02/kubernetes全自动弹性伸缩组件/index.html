@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="青木的博客">
 <meta property="og:description" content="目标 使用容器完成 metrics-server 部署 演示 Horizontal Pod Autoscaling （pod 自动缩放）  部署 metrics-server 服务 Horizontal Pod Autoscaler（HPA）控制器用于实现基于CPU使用率进行自动Pod伸缩的功能。 HPA控制器基于Master的kube-controller-manager服务启动参数–horiz">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-02T08:23:16.946Z">
+<meta property="og:updated_time" content="2018-08-13T09:35:36.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kubernetes全自动弹性伸缩组件">
 <meta name="twitter:description" content="目标 使用容器完成 metrics-server 部署 演示 Horizontal Pod Autoscaling （pod 自动缩放）  部署 metrics-server 服务 Horizontal Pod Autoscaler（HPA）控制器用于实现基于CPU使用率进行自动Pod伸缩的功能。 HPA控制器基于Master的kube-controller-manager服务启动参数–horiz">
@@ -327,12 +327,24 @@
                 
               
 
-              <time title="创建时间：2018-08-02 12:02:42 / 修改时间：16:23:16" itemprop="dateCreated datePublished" datetime="2018-08-02T12:02:42+08:00">2018-08-02</time>
+              <time title="创建时间：2018-08-02 12:02:42" itemprop="dateCreated datePublished" datetime="2018-08-02T12:02:42+08:00">2018-08-02</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-13 17:35:36" itemprop="dateModified" datetime="2018-08-13T17:35:36+08:00">2018-08-13</time>
               
             
           </span>
@@ -399,7 +411,7 @@
 <li>/etc/kubernetes/pki/front-proxy-ca.pem 文件来自于<a href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-%E5%85%A8%E8%87%AA%E5%8A%A8ansible%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/">部署kubernetes集群</a></li>
 <li>需要对yml文件进行修改才可使用 改动如下</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">metrics-server</span> </span><br><span class="line"><span class="attr">  image:</span> <span class="string">freemanliu/google_containers-metrics-server-amd64:v0.2.1</span> <span class="comment"># gcr 被墙了替换镜像</span></span><br><span class="line"><span class="attr">  imagePullPolicy:</span> <span class="string">Always</span></span><br><span class="line"><span class="attr">  volumeMounts:</span></span><br><span class="line"><span class="attr">  - mountPath:</span> <span class="string">/etc/kubernetes/pki</span>  </span><br><span class="line"><span class="attr">    name:</span> <span class="string">ca-ssl</span></span><br><span class="line"><span class="attr">  command:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">/metrics-server</span></span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--source=kubernetes.summary_api:''</span></span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.pem</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-username-headers=X-Remote-User</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-group-headers=X-Remote-Group</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-extra-headers-prefix=X-Remote-Extra-</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line"><span class="attr">- name:</span> <span class="string">ca-ssl</span></span><br><span class="line"><span class="attr">  hostPath:</span></span><br><span class="line"><span class="attr">   path:</span> <span class="string">/etc/kubernetes/pki</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">metrics-server</span> </span><br><span class="line"><span class="attr">  image:</span> <span class="string">freemanliu/metrics-server-amd64:v0.2.1</span> <span class="comment"># gcr 被墙了替换镜像</span></span><br><span class="line"><span class="attr">  imagePullPolicy:</span> <span class="string">Always</span></span><br><span class="line"><span class="attr">  volumeMounts:</span></span><br><span class="line"><span class="attr">  - mountPath:</span> <span class="string">/etc/kubernetes/pki</span>  </span><br><span class="line"><span class="attr">    name:</span> <span class="string">ca-ssl</span></span><br><span class="line"><span class="attr">  command:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">/metrics-server</span></span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--source=kubernetes.summary_api:''</span></span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.pem</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-username-headers=X-Remote-User</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-group-headers=X-Remote-Group</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="bullet">--requestheader-extra-headers-prefix=X-Remote-Extra-</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line"><span class="attr">- name:</span> <span class="string">ca-ssl</span></span><br><span class="line"><span class="attr">  hostPath:</span></span><br><span class="line"><span class="attr">   path:</span> <span class="string">/etc/kubernetes/pki</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>这里将github提供的多个文件合并为一个方便一些</li>
 <li>kubectl apply -f  metrics-server.yml 进行部署</li>
