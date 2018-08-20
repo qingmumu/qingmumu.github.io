@@ -121,7 +121,7 @@
 <meta property="og:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://www.qingmu.io/images/5DD61E91-53D8-484D-B117-7D87B4827405.png">
-<meta property="og:updated_time" content="2018-08-20T10:02:42.965Z">
+<meta property="og:updated_time" content="2018-08-20T10:08:25.220Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用docker运行spring-cloud应用">
 <meta name="twitter:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
@@ -346,7 +346,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 18:02:42" itemprop="dateModified" datetime="2018-08-20T18:02:42+08:00">2018-08-20</time>
+                <time title="修改时间：2018-08-20 18:08:25" itemprop="dateModified" datetime="2018-08-20T18:08:25+08:00">2018-08-20</time>
               
             
           </span>
@@ -425,7 +425,8 @@
 <li>配置UTC+8时区需要安装tzdata，安装完成之后配置一下即可。</li>
 <li>目前alpine携带JDK版本为1.80_171</li>
 <li>使用<a href="https://github.com/krallin/tini" target="_blank" rel="noopener">tini</a> 包装java进程</li>
-<li><h1 id="Jre-base-image"><a href="#Jre-base-image" class="headerlink" title="Jre base image"></a>Jre base image</h1></li>
+</ul>
+<h1 id="Jre-base-image"><a href="#Jre-base-image" class="headerlink" title="Jre base image"></a>Jre base image</h1><ul>
 <li>镜像全部使用github+<a href="https://hub.docker.com/r/freemanliu/openjre/" target="_blank" rel="noopener">dockerhub</a>的autobiuld自动构建</li>
 <li>完整的镜像如下图所示</li>
 </ul>
