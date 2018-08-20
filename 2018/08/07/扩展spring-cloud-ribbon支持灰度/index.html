@@ -120,10 +120,12 @@
 <meta property="og:site_name" content="青木的博客">
 <meta property="og:description" content="目标 扩展ribbon完成灰度调用 完成对zuul的支持 完成服务间调用的支持 实战，解决在开发环境，进行开发中的测试,DEBUG.在微服务的模式下,需要在开发者的机器启动大量服务，启动大量的服务需要大量的内存和大量的时间，在我们时间的项目开发中，在16G的机器上甚至无法进行调和测试相关工作。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-07T13:22:10.248Z">
+<meta property="og:image" content="https://www.qingmu.io/images/zuul.png">
+<meta property="og:updated_time" content="2018-08-20T10:24:50.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="扩展spring-cloud-ribbon支持灰度">
 <meta name="twitter:description" content="目标 扩展ribbon完成灰度调用 完成对zuul的支持 完成服务间调用的支持 实战，解决在开发环境，进行开发中的测试,DEBUG.在微服务的模式下,需要在开发者的机器启动大量服务，启动大量的服务需要大量的内存和大量的时间，在我们时间的项目开发中，在16G的机器上甚至无法进行调和测试相关工作。">
+<meta name="twitter:image" content="https://www.qingmu.io/images/zuul.png">
 
 
 
@@ -327,12 +329,24 @@
                 
               
 
-              <time title="创建时间：2018-08-07 12:42:47 / 修改时间：21:22:10" itemprop="dateCreated datePublished" datetime="2018-08-07T12:42:47+08:00">2018-08-07</time>
+              <time title="创建时间：2018-08-07 12:42:47" itemprop="dateCreated datePublished" datetime="2018-08-07T12:42:47+08:00">2018-08-07</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-20 18:24:50" itemprop="dateModified" datetime="2018-08-20T18:24:50+08:00">2018-08-20</time>
               
             
           </span>
@@ -393,7 +407,8 @@
 <li>实战，解决在开发环境，进行开发中的测试,DEBUG.在微服务的模式下,需要在开发者的机器启动大量服务，<br>启动大量的服务需要大量的内存和大量的时间，在我们时间的项目开发中，在16G的机器上甚至无法进行调<br>和测试相关工作。</li>
 </ul>
 <a id="more"></a>
-<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><h2 id="ZUUL调用服务"><a href="#ZUUL调用服务" class="headerlink" title="ZUUL调用服务"></a>ZUUL调用服务</h2><ul>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p><img src="/images/zuul.png" alt=""></p>
+<h2 id="ZUUL调用服务"><a href="#ZUUL调用服务" class="headerlink" title="ZUUL调用服务"></a>ZUUL调用服务</h2><ul>
 <li>利用eureka的mate-map机制，在服务启动时添加部分元数据信息</li>
 </ul>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="string">eureka.instance.metadata-map.developer=qingmu</span></span><br></pre></td></tr></table></figure>
