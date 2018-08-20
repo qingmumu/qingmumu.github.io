@@ -281,7 +281,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -300,8 +300,183 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/07/使用docker运行spring-cloud应用/" itemprop="url">
-                  使用docker运行spring-cloud应用
+                <a class="post-title-link" href="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/" itemprop="url">
+                  如何优雅的处理在springcloud中的异常体系
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-20 19:18:33 / 修改时间：19:29:10" itemprop="dateCreated datePublished" datetime="2018-08-20T19:18:33+08:00">2018-08-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/" class="leancloud_visitors" data-flag-title="如何优雅的处理在springcloud中的异常体系">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><ul>
+<li>说明异常处理体系流程</li>
+<li>说明全局异常处理的使用</li>
+<li><p>说明Feign对异常的处理方式，及其扩展。</p>
+</li>
+<li><p>实现后端业务之间透明化异常处理（S2S）服务调服务</p>
+</li>
+<li>实现前端UI与服务ZUUL直接透明化异常处理（U2S）</li>
+<li>实现ZUUL的异常处理</li>
+<li>实现对Feign的扩展</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/How-to-run-springcloud-in-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/07/How-to-run-springcloud-in-docker/" itemprop="url">
+                  如何把springcloud运行在docker中
                 </a>
               
             
@@ -344,7 +519,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 18:08:25" itemprop="dateModified" datetime="2018-08-20T18:08:25+08:00">2018-08-20</time>
+                <time title="修改时间：2018-08-20 19:21:44" itemprop="dateModified" datetime="2018-08-20T19:21:44+08:00">2018-08-20</time>
               
             
           </span>
@@ -358,8 +533,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/07/使用docker运行spring-cloud应用/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/使用docker运行spring-cloud应用/" itemprop="commentCount"></span>
+                <a href="/2018/08/07/How-to-run-springcloud-in-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/How-to-run-springcloud-in-docker/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -367,7 +542,7 @@
 
           
           
-             <span id="/2018/08/07/使用docker运行spring-cloud应用/" class="leancloud_visitors" data-flag-title="使用docker运行spring-cloud应用">
+             <span id="/2018/08/07/How-to-run-springcloud-in-docker/" class="leancloud_visitors" data-flag-title="如何把springcloud运行在docker中">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -417,7 +592,7 @@
 </ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/07/使用docker运行spring-cloud应用/#more" rel="contents">
+            <a class="btn" href="/2018/08/07/How-to-run-springcloud-in-docker/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -473,7 +648,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/扩展spring-cloud-ribbon支持灰度/">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -492,7 +667,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/07/扩展spring-cloud-ribbon支持灰度/" itemprop="url">
+                <a class="post-title-link" href="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/" itemprop="url">
                   扩展spring-cloud-ribbon支持灰度
                 </a>
               
@@ -536,7 +711,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 18:24:50" itemprop="dateModified" datetime="2018-08-20T18:24:50+08:00">2018-08-20</time>
+                <time title="修改时间：2018-08-20 19:22:37" itemprop="dateModified" datetime="2018-08-20T19:22:37+08:00">2018-08-20</time>
               
             
           </span>
@@ -550,8 +725,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/07/扩展spring-cloud-ribbon支持灰度/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/扩展spring-cloud-ribbon支持灰度/" itemprop="commentCount"></span>
+                <a href="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -559,7 +734,7 @@
 
           
           
-             <span id="/2018/08/07/扩展spring-cloud-ribbon支持灰度/" class="leancloud_visitors" data-flag-title="扩展spring-cloud-ribbon支持灰度">
+             <span id="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/" class="leancloud_visitors" data-flag-title="扩展spring-cloud-ribbon支持灰度">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -599,7 +774,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/07/扩展spring-cloud-ribbon支持灰度/#more" rel="contents">
+            <a class="btn" href="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -655,7 +830,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/02/kubernetes全自动弹性伸缩组件/">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/02/kubernetes-metrics-server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -674,7 +849,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/02/kubernetes全自动弹性伸缩组件/" itemprop="url">
+                <a class="post-title-link" href="/2018/08/02/kubernetes-metrics-server/" itemprop="url">
                   kubernetes全自动弹性伸缩组件
                 </a>
               
@@ -732,8 +907,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/02/kubernetes全自动弹性伸缩组件/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/02/kubernetes全自动弹性伸缩组件/" itemprop="commentCount"></span>
+                <a href="/2018/08/02/kubernetes-metrics-server/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/02/kubernetes-metrics-server/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -741,7 +916,7 @@
 
           
           
-             <span id="/2018/08/02/kubernetes全自动弹性伸缩组件/" class="leancloud_visitors" data-flag-title="kubernetes全自动弹性伸缩组件">
+             <span id="/2018/08/02/kubernetes-metrics-server/" class="leancloud_visitors" data-flag-title="kubernetes全自动弹性伸缩组件">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -784,7 +959,7 @@
 <li>官网原话是 <code>The --horizontal-pod-autoscaler-use-rest-clients is true or unset. Setting this to false switches to Heapster-based autoscaling, which is deprecated.</code>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/02/kubernetes全自动弹性伸缩组件/#more" rel="contents">
+            <a class="btn" href="/2018/08/02/kubernetes-metrics-server/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -840,7 +1015,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-ansible/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -859,7 +1034,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/" itemprop="url">
+                <a class="post-title-link" href="/2018/07/31/Kubernetes-v1-11-1-ansible/" itemprop="url">
                   Kubernetes-v1.11.1-全自动ansible部署指南
                 </a>
               
@@ -917,8 +1092,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/" itemprop="commentCount"></span>
+                <a href="/2018/07/31/Kubernetes-v1-11-1-ansible/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/07/31/Kubernetes-v1-11-1-ansible/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -926,7 +1101,7 @@
 
           
           
-             <span id="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/" class="leancloud_visitors" data-flag-title="Kubernetes-v1.11.1-全自动ansible部署指南">
+             <span id="/2018/07/31/Kubernetes-v1-11-1-ansible/" class="leancloud_visitors" data-flag-title="Kubernetes-v1.11.1-全自动ansible部署指南">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -966,7 +1141,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/31/Kubernetes-v1-11-1-全自动ansible部署指南/#more" rel="contents">
+            <a class="btn" href="/2018/07/31/Kubernetes-v1-11-1-ansible/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1054,7 +1229,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1085,7 +1260,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>

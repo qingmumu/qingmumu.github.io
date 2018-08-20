@@ -113,17 +113,17 @@
 
 
   <meta name="description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
-<meta name="keywords" content="docker,微服务">
+<meta name="keywords" content="微服务,docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用docker运行spring-cloud应用">
-<meta property="og:url" content="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/index.html">
+<meta property="og:title" content="如何把springcloud运行在docker中">
+<meta property="og:url" content="https://www.qingmu.io/2018/08/07/How-to-run-springcloud-in-docker/index.html">
 <meta property="og:site_name" content="青木的博客">
 <meta property="og:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://www.qingmu.io/images/5DD61E91-53D8-484D-B117-7D87B4827405.png">
-<meta property="og:updated_time" content="2018-08-20T10:08:25.220Z">
+<meta property="og:updated_time" content="2018-08-20T11:21:44.272Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用docker运行spring-cloud应用">
+<meta name="twitter:title" content="如何把springcloud运行在docker中">
 <meta name="twitter:description" content="目标（以下镜像均在生产使用） 自定义Dockerfile构建一个生产可用的jre base image 配置maven docker 打包发布插件完成从源码的打包fat jar-&amp;gt; build  docker image -&amp;gt; push image 使用docker运行打包完成的镜像  构建一个jre镜像 首先我们对这个镜像有如下要求   镜像比如要足够小（必须在100M以内） 字符集">
 <meta name="twitter:image" content="https://www.qingmu.io/images/5DD61E91-53D8-484D-B117-7D87B4827405.png">
 
@@ -132,7 +132,7 @@
 
 
 
-  <link rel="canonical" href="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/"/>
+  <link rel="canonical" href="https://www.qingmu.io/2018/08/07/How-to-run-springcloud-in-docker/"/>
 
 
 
@@ -142,7 +142,7 @@
   };
 </script>
 
-  <title>使用docker运行spring-cloud应用 | 青木的博客</title>
+  <title>如何把springcloud运行在docker中 | 青木的博客</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/使用docker运行spring-cloud应用/">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/07/How-to-run-springcloud-in-docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用docker运行spring-cloud应用
+          <h1 class="post-title" itemprop="name headline">如何把springcloud运行在docker中
               
             
           </h1>
@@ -346,7 +346,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 18:08:25" itemprop="dateModified" datetime="2018-08-20T18:08:25+08:00">2018-08-20</time>
+                <time title="修改时间：2018-08-20 19:21:44" itemprop="dateModified" datetime="2018-08-20T19:21:44+08:00">2018-08-20</time>
               
             
           </span>
@@ -360,8 +360,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/07/使用docker运行spring-cloud应用/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/使用docker运行spring-cloud应用/" itemprop="commentCount"></span>
+                <a href="/2018/08/07/How-to-run-springcloud-in-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/08/07/How-to-run-springcloud-in-docker/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -369,7 +369,7 @@
 
           
           
-             <span id="/2018/08/07/使用docker运行spring-cloud应用/" class="leancloud_visitors" data-flag-title="使用docker运行spring-cloud应用">
+             <span id="/2018/08/07/How-to-run-springcloud-in-docker/" class="leancloud_visitors" data-flag-title="如何把springcloud运行在docker中">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -493,9 +493,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/docker/" rel="tag"># docker</a>
-          
             <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
           
         </div>
       
@@ -528,7 +528,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/07/扩展spring-cloud-ribbon支持灰度/" rel="next" title="扩展spring-cloud-ribbon支持灰度">
+              <a href="/2018/08/07/Extended-spring-cloud-ribbon-supports-grayscale/" rel="next" title="扩展spring-cloud-ribbon支持灰度">
                 <i class="fa fa-chevron-left"></i> 扩展spring-cloud-ribbon支持灰度
               </a>
             
@@ -537,6 +537,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/20/How-to-handle-exceptions-gracefully-in-springcloud/" rel="prev" title="如何优雅的处理在springcloud中的异常体系">
+                如何优雅的处理在springcloud中的异常体系 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -613,7 +617,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -644,7 +648,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
