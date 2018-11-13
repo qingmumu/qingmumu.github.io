@@ -281,6 +281,375 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/" itemprop="url">
+                  记SpringCloud 1.X 升级到2.x
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-31 13:32:01" itemprop="dateCreated datePublished" datetime="2018-10-31T13:32:01+08:00">2018-10-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-13 17:54:19" itemprop="dateModified" datetime="2018-11-13T17:54:19+08:00">2018-11-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/" class="leancloud_visitors" data-flag-title="记SpringCloud 1.X 升级到2.x">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>前后花了两周多个时间完成了 <code>Spring Boot 1.5.6.RELEASE &amp; Spring Cloud Dalston.SR4</code>  升级到 <code>Spring Boot 2.0.6.RELEASE &amp; Spring Cloud Finchley.SR2 &amp; spring-cloud-netflix  2.0.2.RELEASE</code> 的工作。</li>
+<li>总结一下遇到的一些问题</li>
+</ul>
+<h2 id="一些问题的总结"><a href="#一些问题的总结" class="headerlink" title="一些问题的总结"></a>一些问题的总结</h2><ul>
+<li>首先 1.x和2.x的所有的服务注册，服务发现，灰度调用，服务调用，zuul网关等等组件核心都是兼容的。so大胆的升级吧。</li>
+<li>其次maven pom变化较大,主要是netifilx的artifactId变化比较多,其余的变化都不是太大，这都可以通过<code>spring-cloud-netflix-dependencies</code>pom中找到。</li>
+<li>然后是feign的变化比较大，整个包名发生了变化。</li>
+<li>NotBlank,NotEmpty 现在已经纳入了JSR303了，不需要在使用hibernate提供的注解了。</li>
+</ul>
+<h2 id="一些建议"><a href="#一些建议" class="headerlink" title="一些建议"></a>一些建议</h2><ul>
+<li>建议统一抽象出一个业务服务使用pom依赖项目，并打包发布维护起来，比如我们这里就叫<code>my-server-dependencies</code>的这么一个pom项目。这样做有几个好处：</li>
+<li>第一个是通过将版本统一管理起来了，方便对所有的基础服务jar包进行升级，而且能够完成版本的基础依赖管理。</li>
+<li>第二个是能够避免掉由于未付项目过多之后导致的依赖版本混乱。</li>
+<li>第三个是能够将maven插件统一的配置，比如说<code>docker打包插件</code>,<code>fatjar插件</code>,<code>compiler插件</code> ，能统一的对他们进行控制和配置，并通过properties暴露出集体的调优指标。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="url">
+                  如何完成一个监控体系
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-30 15:43:52" itemprop="dateCreated datePublished" datetime="2018-10-30T15:43:52+08:00">2018-10-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-13 17:54:29" itemprop="dateModified" datetime="2018-11-13T17:54:29+08:00">2018-11-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" class="leancloud_visitors" data-flag-title="如何完成一个监控体系">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="整体架构图"><a href="#整体架构图" class="headerlink" title="整体架构图"></a>整体架构图</h1><iframe frameborder="0" style="width:100%;height:681px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E7%9B%91%E6%8E%A7.xml#R7V1bk5s2FP41mmkfNgMCgXgEm0370E5mtp22j9jINg02Hoz30l9fCZANkrBZLO%2FizeYhEUIIWec79yMCrMn6%2BWsebVe%2FZTFJATTiZ2BNAYSmaRr0H9bzUvV4Nq46lnkS14OOHQ%2FJf6TurJ9b7pOY7FoDiyxLi2Tb7pxnmw2ZF62%2BKM%2Bzp%2FawRZa237qNlkTqeJhHqdz7VxIXq6oXQ%2FfY%2FwtJliv%2BZtPxqjuzaP59mWf7Tf0%2BAK1F%2Bae6vY74XPUP3a2iOHtqdFkhsCZ5lhVVa%2F08ISnbW75t1XP3HXcP687JpujzAKweeIzSff3TyT4n3yMAnZROEMxy2lqyVr3e4oXv0apYp7Rl0ntPq6QgD9tozm49UUjQvnm2Tub1%2FV2RZ98PO0l%2FZLDINsV9tE5SBpBJORQaD9FmR%2F%2F57aEe8FC%2FjE2xSNJ0kqVZXr7ciiOCF%2FPD1I07zhyT2eKw4OZW1LvzSPKCPDe66q35SrI1KfIXOqS%2Ba3n4C6oeqoFsOzXhno6wMDkxVw1I8HFRjcTlYfIjNWijJoiaOJZEnIdtnmyWkzTbx3c7kj8mc2L%2BiIQxLZEwlvWGhOFi6jRl4CdlSpYx35IyZh%2FK2J%2BUKSnjvSVlZFWjoMzvn5RhPch9S8p4EmW4%2Bt%2FmhOv%2FbzmbeUX2O4VtEDoATwB2WcM3yobH%2Fq4aXgCwA8J7EEzYsBABfwo8zBoYAh%2FzCelCGy8cFxKoCQfnSiTEzsxBjh4kIM6RnEMhknFgezIOXA04gFiBA4EGpWlL2APG2S0nm9hntji9nKXZ%2FPsfq2RDuxtkfDVRyHNS%2FN1o%2F8MWQnnnxObvsn0%2BJy2DisQt61%2BmRmO3kYLpeF9O0qhIHts%2Bg4oC9Ru%2BZQld3IHY0JUEsiGQsVp8%2FVzTjBemsqBkD4mSoYjyJSmkqSiFopfGsC0bsJNgc9icfkhSSZQPhSRu04wESrIGcaE2KNl2PygNAIolG9IfDSjmqIACHYm6SBtQkIg5jUD5kLppLKBAEiU9j%2FdogIU8mUZg3I6qoWBAsAUOfvWN5An9zSSvl0hxkr%2F83bx4pdSxx6WeLAuKUgdbA%2BHlOZIXa10LXI4rg4t6OB51Y6al9%2BID32Q9gcXcGNZTOkIiAKn1X7RBlJNd8l80KwcwItdmFx2NAoCmtCdKkyVF3nRO6cyAETAvIplHqV%2FfWCdxzJ4P0mhG0uAQeG47LSz0rALNgW9E3%2BQQVK9XB5qBaZXPcmd8MRzDatHkzrwMN3xItljsyKVUtHsYGWmyIUp50KBZnOR0W5KMbT6FKxuiJcgMbdF2txXev4I7tXh9thwxG5sAHbv%2BdG3BaxcN5r7CzTTaE1k9DapuJ65jwY56wV3rEsc77unx4u8QxtNGteLBclmB2dAGAQZBwOUyLoNSAcBe2XMPPOcW5LLdJT%2BGyGXT4HnJUcplqJA8Utyxykfe0R%2B%2F26d3URxt2bZ3RAylp0FIMUFpbzMQeAHwQpUCpw0MPJcNppe9A5L5KlvP9rs2giR8fNSotW1aot4yZL0FLVOWu6Yo1wYpLltpnAks34va41J3B%2Bv%2FcHG0%2Fhu%2BRNOT6B2NqMVBpUfabDgSZaoIZQ2NippYnMoRgx2aFKrjqKOvuhSejUZvpB191gqaB9x2ovakadfyZqGM2nGB1jGlsJpom%2FcFLcKuOBXsFz15LWgRbBsH56xAZL7OarTRyfkvZwqn035YWVxpf82jRbSJGhr9eI93xsnj0V4oFYd%2FX2oHt8xbIubSe05tQQThUXHUKU38RGZ0HX%2F%2Byju8xuuak4ssO%2FaMZtPj3WS5Lo9XzHIiW5HlRLbCbjB12A03EEoeEv9rSsdxJTqlKjopOdlbo9uSRvf6afQB8gUp%2FBO5rOEWfEqOeB0%2BpXUZJPR6kDcQ%2FB%2FCymPl2%2BGBLbn27HpJZSTXzd4o3%2BqM0UNh%2F0fExhyun2z8NmyMeBjgcjaWptLIxqr4zi2y8QHeV2DjMcVz0fgzSR%2BLjYcXaSgY%2BZpFGkgRvrpNVtaZnRFY%2BdLczIvyAT2c3R1p2W2jDY9v%2BCndlnW0iZbHDE3zAJnYE66jJO0zsBFOab5PQszY4ymdIuYVWRdDLKVBliJ6ojoroCXr4sjRk69pNovS8HlOtixW9Eu0oRymAMBPnN7RmlFjM9ttyz0xyrSND3xURtamwHd%2B%2FjDnDxWSQqJ%2FJ7HFPDpUHaXCVzoO4Cqs8tAtk6hlzRMOWYA0RCwi6ivTqnSwD7CtulUHThvhVpclaeusvVHO7ADfYm1WX4VYXk%2BMrjagVT5%2Fz8DD6gDuG%2B%2BYlJoGlku0WX1AcDyKQkpAfqKvozDJPI8%2BiBWCRgv6ZGNyqtAMPylOEzGDYlICh9KT0tZUwbYTm%2BMnPiI4tlXEx3BmOY4e4juShQjNnnpGx5k0VxV7RYyJKdkYzdySjzEIpiVnY%2Fa3P5Uo9d7%2BBk98ArEm%2FFSSH6jcjrNZUs4xzTyA22GEvpHH0pYf7tCTBqZQXycVBOjzVFxF7HBsmDqRaO%2BPHCmX%2Fl4gsYTaQojtYShxRGMJXSdtLi74vdPgripOhpmeC9wzdVBMnIalvqQmEioT3BMQGGVjCrhqH59L3tv9bkO%2FYu5TLrlp86Tfhai%2Bu4YbjhVK8UaEkzlYOFUO53tJp4N921VA1r8WTSjtFksZNEknccH8PZ3r8tCp8RdLJ%2B6dNjD7b5SXrljIhAwz4dCIa7MHihrcoVPrmYwvtmcLG69J8PB5XoRrvZLoBsykMzWHrzWvzXe1klxNprQkz3qm4V8rhkzPU75Hl1jxVBmF6vhdacewgNGECZoPJlZOWzDUgIGGcOJjTPU6%2BAbKmC8WG%2B8lIkwPtyiPBssItw0hdPGnRHouWHPRvKeqA%2FoBZAQ6IyMg4t%2BxHGERAValGj9FhDYRoeuYAhUS0pH%2Bq4mJjjdpExSqCMoPICicM4LCwIImuLRE4Vn5gB65ofpUQx8afgoTTfaGJVbiD7U3pK%2BgXcne4O%2FRJkZuQHWdCM%2Bd%2B37Rax1mfjyrGcyrqkU%2F81H9MaUSa8rgPioD9w4L8fvhB9NU3mlNxb5Ag0291XRalZOnOHJWnS%2F0HU5FU6LZe8uKM0fNh8mDW%2Bd9xM%2FW8cCWNt6nl8fv%2FlfDj%2F%2B5ghX%2BDw%3D%3D"></iframe>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/10/21/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -866,7 +1235,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-18 12:51:07" itemprop="dateModified" datetime="2018-09-18T12:51:07+08:00">2018-09-18</time>
+                <time title="修改时间：2018-11-13 16:13:31" itemprop="dateModified" datetime="2018-11-13T16:13:31+08:00">2018-11-13</time>
               
             
           </span>
@@ -1576,7 +1945,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
