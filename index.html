@@ -281,6 +281,412 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/15/Zuul-processing-flow-and-business-extension-point/" itemprop="url">
+                  Zuul处理流程以及业务扩展点
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-15 23:19:17 / 修改时间：17:16:26" itemprop="dateCreated datePublished" datetime="2018-11-15T23:19:17+08:00">2018-11-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/15/Zuul-processing-flow-and-business-extension-point/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/11/15/Zuul-processing-flow-and-business-extension-point/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/15/Zuul-processing-flow-and-business-extension-point/" class="leancloud_visitors" data-flag-title="Zuul处理流程以及业务扩展点">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>Zuul在<code>Spring Cloud Netfilx</code> 体系中扮演着接入者网关的角色。我们需要对其进行相应的扩展以满足我们的业务需求。</li>
+<li>比如我们希望在网关统一对用户进行鉴权，进行<code>JWT</code>的解析和参数转换，比如我们想实现自己的httpClient，再比如我们想在后端业务微服务返回的结果内进行一些特别的处理，比如脱敏啊，比如去掉一些字段啊。</li>
+<li>本质上来说Zuul本身就是一组Fillter，按照生命周期我们可以分为四种类型（pre,route,post,err）分别对应请求过程。你可以从<code>com.netflix.zuul.FilterProcessor</code>类里面找到所有的生命周期处理。</li>
+</ul>
+<h2 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h2><ul>
+<li>在maven中加入sprin cloud 对zuul的gav<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-zuul<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Zuul中Filter的流程"><a href="#Zuul中Filter的流程" class="headerlink" title="Zuul中Filter的流程"></a>Zuul中Filter的流程</h1><ul>
+<li>请求流程</li>
+</ul>
+<iframe frameborder="0" style="width:100%;height:793px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=zuulFilter%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.xml#R7Vtbb6s4EP41ftiHRoC5PpKU7L6c1ZFypN3uGwEnQSUYAWnT%2Fvq1wRCwoSFpLiQnVaXCeHyZmY%2BZ8dgFcLLe%2Fpm48eoH9lEIFMnfAvgMFEWWZYn8oZSPgmKpZkFYJoHPmHaEWfCJGJH1W24CH6UNxgzjMAviJtHDUYS8rEFzkwS%2FN9kWOGzOGrtLJBBmnhuK1H8CP1sVVFMxdvS%2FULBclTPLulW0rN2SmUmSrlwfv9dI0AFwkmCcFU%2Fr7QSFVHmlXop%2B047WamEJirI%2BHdSiw5sbbphscYKmQZihhC0w%2ByilXmXrkDzJAI7fV0GGZrHr0aZ3YmRC8%2FA68Fh7miX4tdINkWq8wFE2dddBSE0%2ByVkVaeZGKfnzY8YYZmwyOgRbGEoytO0UTq5URrCG8BplyQdhYR00pmSGMhmy9%2FedzeTSEKuavXRGcxlMltXIO02SB6bMDksogmYTvMnuVbdQuaRuoYhanGZ3qlrtoqoVHQIiDjO5F90qJodbtadyjVMoVxeU%2B99mE85Q8haibJSSvwFR380rmQPwRfFrCCoGjg4sE9hT4GjAkoCt04fxBJhK%2FmDSX17nyQqv5xuykHFN%2B24YLCPy7BE9kI%2FhVsyhc%2BZos4d0LnuYD3vssYd6UXtYoj0EXeNN5CPaQdqrPxT5Nk2oyes8xN7rr1UQNY10sIaJFpOPf%2BnsI618fWGLQdsgqzWRt5eGXZAvJO6cVYikeJN4JRfzyJmbLBFjU9uNV7OO1mKckpag0M2Ct%2BYq2izGZviJA7K%2BXXwymuDgbV4snnWq5%2FX8OFyck%2FmBComFgXL8VFL3glSJoCFDisFGroGmhq68aSRB2IDbSCfJECP8RElAVEKdTC7BIgjDCQ5xkosHfQ2ZvlpJU2sxlTnU9ePxqYr4LHaZ1wKoJnHZqXokQvmBLKUfQgk23I8aW0wZ0u4Fq9w8hg45wBcjHgt%2FtX0zQigOTZyFT4HEjawJ5wSlwac7zxkouJhEhFsbA%2B25LdDR%2BBN4bmizhnXg%2B7T%2FOHTnKBy73usy%2F%2BRqSFzkP19FMFYtYSsBVZ5Qx2jxbXeGtidpJKsQNuPb93BXsuDFIkXf9lWisYbmq%2Fo7irpTkK%2FqFKqCXhltrGPDFrd1MOTzhS1xp%2Fs3HhoYLpoLGS2w6vjcL5QM8UUmeAOw0gbvYbqB8xXcjgSV0gIq8wGqA0ElFo4G6KsuCSuzBVbwAasDYSUWywhq4iAkOx1fgNetlyGNvnXIU5R6lZY6y6Pu1bCHfsm6V%2Fk1PsJyzVdydQXr4T8P859QvmFQHQecOwEJv2E1%2BIFOCBJFAElL7nbbVSH4teN%2FkkblbvujMfYgakJw%2BDWh7vo1V4gmtlQ8r60Q7etzXftGIfqq9aXTBQeuGAwNrdd3f2jRmZ%2BnFOBURWcoHqu%2BoPTevErHhm7nVVRLb9aan4ZUbIZihXGojoU4E82sJwgjSYXsnT%2F72h2ZNY%2FLWt0R0jvckWHNpW%2Fkry3nYr%2F5%2Fv9QFwX5a2YndlGqmBzHCQLVsZgeUtc0p09L%2BpTfjgT3eWoGO%2B4U1E7NoKY1PZn2TVe25cYpzWw0RziNp2u5dTVQT7c3hTrbWf51t06a3P65H%2B6f1AulUNw8etM%2F7V%2BXdeJzfrGCdIcpV0eaX0u5THW4Wzm1zQ8VgWYll4Hmc7OhfcobzRItvtoqMFXgGLQua%2BrAMcF4CkyDUmwTmONyFLKA3UAlMa4IlH1Cfx2VFnNNKa%2F5PgNbBo4FCCDHDnCmec3XpE02aYJ5LxnYTj6%2FnS9k%2F4r%2BANAm87prWuuN5mmcL0g6mlTE5qeqhUkolWFZbCluuVR6iXuqhQg4%2BVItGrAIs0kXJNqhUCzRGxnBtIE1pvyEgQwrFNN7qqhLclQkIqeTnAhg9ZG8UPkpZG%2B3aodJO%2BRlwnJaPEx4jS6WrreH2el0Z7H7IbpgN7jaNdRHF3ujQjO7iHCEuFSEkdLY9YJoSQja7u0XJjM%2FPyk0nLSd%2FWDi%2Fhdhnj%2BtSOhAUSFpLf%2FqjBL9j3OqSz7d1%2Fyh2ZLQCFdRjznPUVvuld9qxnm%2Bot1VL1rI3FXm4%2B8yX6lop%2B7LODvWdbKMUzxDvr%2BMU%2B3A6K0U%2Bcrt9YAd0fmKclcrtu3zCL1di2Ec5Vr2A4W87v6Lu2Df%2FS88dP4H"></iframe>
+
+<ul>
+<li>然后我们在idea中展开jar包<br><img src="/images/zuul/zuul1.png" alt=""></li>
+<li><p>可以看到有个标准的spring.factorices描述文件，内容如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.cloud.netflix.zuul.ZuulServerAutoConfiguration,\</span><br><span class="line">org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仔细看有没有觉得很熟悉。有没有想起zuul的两个注解，没错就是<code>@EnableZuulServer</code>和 <code>@EnableZuulProxy</code>，你可以<a href="http://cloud.spring.io/spring-cloud-static/Finchley.RELEASE/single/spring-cloud.html#__literal_enablezuulproxy_literal_vs_literal_enablezuulserver_literal" target="_blank" rel="noopener">点击这里</a>查看他们的区别<br>简单的说，<code>ZuulProxyAutoConfiguration</code>是<code>ZuulServerAutoConfiguration</code>的子类,当使用<code>@EnableZuulProxy</code> 时会启用父类的filter和自己的filter。</p>
+</li>
+<li>那么下面我们先来看一下<code>ZuulServerAutoConfiguration</code> 都激活了些什么东西。这里主要分析主流程和关键Bean</li>
+</ul>
+<ul>
+<li>下面代码截取自<code>spring-cloud-starter-netflix-zuul-2.0.2.RELEASE</code>,弟131-138行。</li>
+<li><p>在这里他激活了一个叫ZuulServlet的类，并把这个类注册给了spring。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ServletRegistrationBean <span class="title">zuulServlet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  ServletRegistrationBean&lt;ZuulServlet&gt; servlet = <span class="keyword">new</span> ServletRegistrationBean&lt;&gt;(<span class="keyword">new</span> ZuulServlet(),</span><br><span class="line">      <span class="keyword">this</span>.zuulProperties.getServletPattern());</span><br><span class="line">  <span class="comment">// The whole point of exposing this servlet is to provide a route that doesn't</span></span><br><span class="line">  <span class="comment">// buffer requests.</span></span><br><span class="line">  servlet.addInitParameter(<span class="string">"buffer-requests"</span>, <span class="string">"false"</span>);</span><br><span class="line">  <span class="keyword">return</span> servlet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们继续追下去看看这个ZuulServlet到底是干了些什么。</p>
+</li>
+<li>下面代码截取自<code>spring-cloud-starter-netflix-zuul-2.0.2.RELEASE</code>,来自类com.netflix.zuul.http.ZuulServlet。去掉了一些干扰阅读的代码。</li>
+<li>在分析代码之前我们先看<code>RequestContext</code>这么个鬼东西，他贯穿了zuul的处理的生命周期，核心作用就是通过ThreadLocal变量将每一给filter处理结果存储起来，进行传递到下一个filter。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestContext</span> <span class="keyword">extends</span> <span class="title">ConcurrentHashMap</span>&lt;<span class="title">String</span>, <span class="title">Object</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;? extends RequestContext&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;RequestContext&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> RequestContext <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> contextClass.newInstance();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 直接返回的就是ThreadLocal变量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestContext <span class="title">getCurrentContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        RequestContext context = threadLocal.get();</span><br><span class="line">        <span class="keyword">return</span> context;</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>核心流程处理直接看到service方法，可以看到这里直接覆写了HttpServlet.service，我们知道所有的请求都会经过service方法，所以这里这里相当于是拦截了所有的请求.</li>
+</ul>
+<p>先介绍一下每个route分别定位是什么：</p>
+<ul>
+<li><p>preFilter：我们可以写一个我们自己的preFilter，在preFilter里面处理user的鉴权，JWT是否有效，参数转换，限流等到前置工作都能在此处实现，并可以通过向外抛出相关异常的方式传递到errorFilter中。</p>
+</li>
+<li><p>routeFilter：route阶段是发起http具体请求的阶段，可想而知如果我们使用ribbon做负载均衡的调用的话，ribbon一定会有一个route阶段的filter来处理具体的请求。没错这个类就<code>RibbonRoutingFilter</code> 它将zuul和ribbon连接起来了，而<code>DiscoveryClientRouteLocator</code>又将ribbon和eurake又连接起来，这样通过从RequestContext中获取到serviceid，就能完成服务发现和服务调用啦。当然你可以新增一个自己的routeFilter来完成自己的http OR 其他协议的请求调用。</p>
+</li>
+<li><p>post: post阶段，这个阶段我们能从RequestContext中获取到route请求完成的结果，可以对ResponseBody进行一些特殊处理，也能添加一下个性化的HttpHeader</p>
+</li>
+</ul>
+<p>接下呢是try…catch三连.轻松的定义了四条路由链处理：</p>
+<ul>
+<li>第一条链（正确的处理过程): <code>pre -&gt; route -&gt; post</code></li>
+<li>第二条链（在pre过程中抛出异常): <code>pre -&gt; error -&gt; post</code> 一般在pre抛出的异常都是我们自定义的异常。</li>
+<li>第三条链（在route过程中抛出异常): <code>pre -&gt;route -&gt;error -&gt;post</code> 在实际使用中，一般是url编写错误，service-id书写有误，或者远程调用发生错误。</li>
+<li>第四条链（在post过程中抛出异常): <code>pre -&gt;route -&gt;post -&gt;error</code> 一般在post抛出异常都是由于客户这边强制关闭了连接比如说客户请求过程中断网啊，比如说下载的excel过大导致客户关闭浏览器啊。</li>
+</ul>
+<h2 id="ZullServlet"><a href="#ZullServlet" class="headerlink" title="ZullServlet"></a>ZullServlet</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZuulServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将实际的路由处理委托给了zuulRunner，即可我们前面提到的四个生命周期的具体调用者就是这位老哥了。后面讲具体讲到</span></span><br><span class="line">    <span class="keyword">private</span> ZuulRunner zuulRunner;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 正常的</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">        <span class="comment">// other code...</span></span><br><span class="line">        <span class="comment">// 在这里激活了zuulRuner</span></span><br><span class="line">        zuulRunner = <span class="keyword">new</span> ZuulRunner(bufferReqs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          RequestContext context = RequestContext.getCurrentContext();</span><br><span class="line">          context.setZuulEngineRan();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                preRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                route();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                postRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            error(<span class="keyword">new</span> ZuulException(e, <span class="number">500</span>, <span class="string">"UNHANDLED_EXCEPTION_"</span> + e.getClass().getName()));</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            RequestContext.getCurrentContext().unset();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//委托给zuulRunner</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">postRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        zuulRunner.postRoute();</span><br><span class="line">    &#125;</span><br><span class="line">      <span class="comment">//委托给zuulRunner</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">route</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        zuulRunner.route();</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//委托给zuulRunner</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">preRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        zuulRunner.preRoute();</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//委托给zuulRunner</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(HttpServletRequest servletRequest, HttpServletResponse servletResponse)</span> </span>&#123;</span><br><span class="line">        zuulRunner.init(servletRequest, servletResponse);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//委托给zuulRunner，并将异常放入ThreadLocal 进行传递</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">error</span><span class="params">(ZuulException e)</span> </span>&#123;</span><br><span class="line">        RequestContext.getCurrentContext().setThrowable(e);</span><br><span class="line">        zuulRunner.error();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ZuulRunner"><a href="#ZuulRunner" class="headerlink" title="ZuulRunner"></a>ZuulRunner</h2><ul>
+<li>可以看到zuulRunner好像也没干实际干事儿，又将调用委托给了一个单例对象。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZuulRunner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        FilterProcessor.getInstance().postRoute();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">route</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        FilterProcessor.getInstance().route();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">        FilterProcessor.getInstance().preRoute();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">error</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        FilterProcessor.getInstance().error();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="FilterProcessor"><a href="#FilterProcessor" class="headerlink" title="FilterProcessor"></a>FilterProcessor</h2><ul>
+<li>接下来我们在看 FilterProcessor 这个类，这个类总算是干活儿的小老铁了。</li>
+<li><p>这个类有个关键的方法 <code>runFilters</code> 这个方法传入的的是一个filterType即要进行route类型，即会传入（pre,route,post,err）这些个类型按照上面分析的流程进行调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">runFilters</span><span class="params">(String filterType)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (RequestContext.getCurrentContext().debugRouting()) &#123;</span><br><span class="line">        Debug.addRoutingDebug(<span class="string">"Invoking &#123;"</span> + sType + <span class="string">"&#125; type filters"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">boolean</span> bResult = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">// 这里是获取到同一个类型的Filter集合</span></span><br><span class="line">    List&lt;ZuulFilter&gt; list = FilterLoader.getInstance().getFiltersByType(sType);</span><br><span class="line">    <span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">            ZuulFilter zuulFilter = list.get(i);</span><br><span class="line">            <span class="comment">//这里又把调用委托到出去了 实际上我们可以看成 zuulFilter.run()；调用</span></span><br><span class="line">            Object result = processZuulFilter(zuulFilter);</span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">                bResult |= ((Boolean) result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>到处我们就将filter的调度周期</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/11/13/How-to-build-a-monitoring-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/How-to-build-a-monitoring-system/" itemprop="url">
+                  如何构建一个监控体系
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-13 23:43:52" itemprop="dateCreated datePublished" datetime="2018-11-13T23:43:52+08:00">2018-11-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-15 19:38:04" itemprop="dateModified" datetime="2018-11-15T19:38:04+08:00">2018-11-15</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/13/How-to-build-a-monitoring-system/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/11/13/How-to-build-a-monitoring-system/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/13/How-to-build-a-monitoring-system/" class="leancloud_visitors" data-flag-title="如何构建一个监控体系">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>对于整个微服务系统而言。一套及时的报警通知，可视化监控，是必不可少的。</li>
+</ul>
+<h1 id="整体架构图"><a href="#整体架构图" class="headerlink" title="整体架构图"></a>整体架构图</h1><iframe frameborder="0" style="width:100%;height:681px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E7%9B%91%E6%8E%A7.xml#R7V1bc6M2FP41zLQP2QGBQDyCTbZ9aGdn0k63j9jINl1sPBjn0l9fSSAMkvASW85CmjwkshBC1vnO%2FYgY9mz7%2FLmI95vf8gRnBjCTZ8OeGwBYlmWSP7TnperxHVR1rIs0qQedOh7Sf3HdWd%2B3PqYJPnQGlnmelem%2B27nMdzu8LDt9cVHkT91hqzzrPnUfr7HU8bCMM7n3rzQpN1UvAt6p%2Fxecrjf8yZbrV1cW8fLbusiPu%2Fp5BrBX7Ke6vI35XPUXPWziJH9qddmRYc%2BKPC%2Br1vZ5hjO6t3zbqvvue6426y7wrhxyA6hueIyzY%2F3V8bHA32IDuBmZIFwUpLWmrXq95Qvfo025zUjLIteeNmmJH%2Fbxkl56IpAgfct8my7r64eyyL81O0m%2BZLjKd%2BV9vE0zCpAZGwrMh3h3IH9%2Be6gHPNQPo1Os0iyb5VlesIfbSYzRatlM3briLhFerJoFt7ei3p1HXJT4udVVb81nnG9xWbyQIfVV20efYHVTDWTHrQn3dIKFxYm5aUGCj4trJK6byU%2FUII2aIGri2BJxHvZFulvPsvyY3B1w8ZgusfV%2FJIxli4Sx7TckDBdT5ykDPijDWMZ6S8pYQyjjfFCGUcZ%2FS8rIqkZBmd8%2FKEN7oPeWlPElynD1vy8w1%2F9fCjrzBh8PCtsgcg00M5BHG4HJGj79XTX80ECuEd0b4YwOi6ARzA0f0QYCRoD4hGShrQeOCwnEhANLJRISd%2BFCVw8SIOdIzqEAyjhwfBkHngYcAKTAgUADZtpieoP53S3HuySgtjj5uMjy5bc%2FNumOdLfI%2BGqi4Oe0%2FNpq%2F00XQnjnzOYf8mOxxB2DCicd61%2BmRmu3oYLpeF%2BBs7hMH7s%2Bg4oC9RO%2B5ClZXENs4EkC2RTIWC2%2Bvq9txgtT2UCyh0TJUMbFGpfSVIRC8Utr2J4OOEiwaTZnGJJUEuVdIYnbNCOBkqxBPKANSo4zDEoXAMWWDen3BhRrVEABrkRdqA0oUMScRqC8S900FlBAiZK%2Bz3s0wEKeTCMwpqNqCBgg6ICDf%2FqCi5R8Z1zUSyQ4KV6%2Btj%2B8Uuo441JPtg1EqYPsC%2BHlu5IXa98KXK4ng4t4OD5xY%2BbMewmMwKI9oU3dGNrDHCERgMT6L7sgKvAh%2FTdesAGUyLXZRUbD0IBz0hNn6Zogb74kdKbACKkXkS7jLKgvbNMkofeHWbzAWdgEnrtOCw09q0DT8I3omzRB9Xp1RjswrfJZ7sxPpmvaHZrcWdfhhg%2FJV6sDvpaKzgAjI0t3WCkPWjRL0oJsS5rTzSdwpUO0BJmBI9rujsL7V3CnFq%2FPkSNmYxOgY9efniN47aLBPFS4WWZ3InugQdXvxPUs2FUvuG9d4njXOz9e%2FB7CeNKoVnyxXFZgNnKMEBlhyOUyYkGp0EA%2B67k3fHcKctnpkx%2BXyGXL5HnJUcploJA8UtyxykfekS9%2FOGZ3cRLv6bb3RAylu42IYILQ3qEg8EPDj1QKnDSQ4Xt0MPk4OCBZbPLt4njoIkjCx3uNWjuWLeotU9ZbwLZkuWuJcu0ixeUojTOB5QdRe1zqrrH%2Bmw8n67%2FlS7Q9icHRiFocVHqky4YjUaaKUNalUVELiVO5YrBDk0J1XXX0VZfCc%2BDojbSTz1pBs8FtL2rPmnYdbxbIqB0XaF1LCquJtvlQ0ELkiVOBYdGT14IWgq5x8D0rEFqvsxodeHb%2B65nC7bUfNjZX2p%2BLeBXv4pZGP13jnUn6eLIXmOII7pl28FjeElKX3ndrCyKMToqjTmmiJ7wg6%2FjzV97htx7Xnlxk2bFnNNse7y4vdHm8YpYTOoosJ3QUdoOlw26YQCj5kvhfWzqOK9EpVdFJycnBGt2RNLo%2FTKNfIF%2Bgwj%2BRyxqm4FNyxOvwKe3rIKHXg5xA8P8SVh4r314e2JJrz26XVIZy3exE%2BVZnjB4I%2Bz8iNuZw%2FWDjt2FjyMMA17OxNJVGNlbFd6bIxg28b8DGY4rnwvFnkt4XG19epKFg5FsWaUBF%2BGqarKwzOyOw8rW5mRflDXo4uz%2FSctjHOx7fCDKyLdt4F69PGZr2ATKxJ9rGaTZkYCuc0n6ehJixx1N6Rcwrsi6mWEoDbUX0RHVWQEvWxZWjJ5%2BzfBFn0fMS72ms6Jd4RzhMAYCfOL3jLaXGbnHYsz0xWdomMALIImtzI3B%2F%2Fjh%2FyK4KeXSgOkqFbnQcwFNY5ZHHkqis5glFNEAaQRoRDZRpVTI4MJCjulQHTlvhVo8maeusvclmdo3Apm1aXwVpXk%2BMrragxe6%2Fp%2BChdQD3rWfMmKYBbIkOrQ8IT0dRMAPkB%2Fp6CpOs76MPIIWg0YI%2B2ZicKzTDT4rTRNSgmDHgEHoS2loq2PZic%2FzEhxgljor4CCxsV5OecSULEVgD9YyOM2meKvYKKRMTslGaeYyPkRHOGWcj%2BjuYS5T60f4GT3waYk34uSR%2FL%2FnaSVHOIO2wP2e8sXgsXfnhXXrSwBLq66SCAH2eiqeIHY4NU2cS7b3IGW%2Fq3BZqCwFyLkOJKxpL8DZpc3HBPzoN7qniZIjqudD7Th0UFacR05fERIIswT0zQpM15gZX7eN2yRuO1VIw6fCk35WovruFG44USnEiwulsrU9bOHH%2FciTSqbFv%2BwrIhteiCaXdYimDJukkLpg%2Fp3ddPjw3%2FmrpxL3TFmb%2FiQvmikVUyFATDk6kNrvhv6tFjfnJ8R1h4zUJHj7Pi%2FBZrySagJl0Xc0hf13JSOSQp8mUluTZwDT8a8WQ5fvK5%2BgSK74qo1Adv2N2DA0YzaigmYJY0WbBEAMGmMKJjzHV66AJlDG%2FXmyMRERYPupQHl4sI7wuhODVrxIZuGDNRfO%2Bqg5oqjKCc44GGQEgf4%2FlCIsIkCrV%2BCEitIkIXccUiJCQjvTfTEz0PEmboFBFUKYqKDj%2FaBAUJhI0wbUlCs%2FKG%2FTIDdWrGobQ8EOYaLI3bLES%2F1J7Q3oL2o3sDf4cbWJkAqrrTHjuyhdd8dNY7WAeLw4dCWInmI%2FyVWJNGdyHLHDv0hB%2FEE1BU%2FnaNBV9Aw2y9FbTaVVOvuLIWXW%2BMHA5FS2JZj9aVvTmrgfJg3fK%2B5CfreOBrRvyvuJ0E83VsTda1OWzMxZJD3htS6eMSQLUNMpWFPJAglqvKFCUrXC35AZlK%2BTj6V81VBQ%2B%2FT8MO%2FoP"></iframe>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/13/How-to-build-a-monitoring-system/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -344,7 +750,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-13 18:01:31" itemprop="dateModified" datetime="2018-11-13T18:01:31+08:00">2018-11-13</time>
+                <time title="修改时间：2018-11-15 15:45:28" itemprop="dateModified" datetime="2018-11-15T15:45:28+08:00">2018-11-15</time>
               
             
           </span>
@@ -418,183 +824,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/10/31/How-to-upgrade-SpringCloud1-x-to-2-x/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="freeman">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="青木的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="url">
-                  如何完成一个监控体系
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-30 15:43:52" itemprop="dateCreated datePublished" datetime="2018-10-30T15:43:52+08:00">2018-10-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-13 17:54:29" itemprop="dateModified" datetime="2018-11-13T17:54:29+08:00">2018-11-13</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" class="leancloud_visitors" data-flag-title="如何完成一个监控体系">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="整体架构图"><a href="#整体架构图" class="headerlink" title="整体架构图"></a>整体架构图</h1><iframe frameborder="0" style="width:100%;height:681px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E7%9B%91%E6%8E%A7.xml#R7V1bk5s2FP41mmkfNgMCgXgEm0370E5mtp22j9jINg02Hoz30l9fCZANkrBZLO%2FizeYhEUIIWec79yMCrMn6%2BWsebVe%2FZTFJATTiZ2BNAYSmaRr0H9bzUvV4Nq46lnkS14OOHQ%2FJf6TurJ9b7pOY7FoDiyxLi2Tb7pxnmw2ZF62%2BKM%2Bzp%2FawRZa237qNlkTqeJhHqdz7VxIXq6oXQ%2FfY%2FwtJliv%2BZtPxqjuzaP59mWf7Tf0%2BAK1F%2Bae6vY74XPUP3a2iOHtqdFkhsCZ5lhVVa%2F08ISnbW75t1XP3HXcP687JpujzAKweeIzSff3TyT4n3yMAnZROEMxy2lqyVr3e4oXv0apYp7Rl0ntPq6QgD9tozm49UUjQvnm2Tub1%2FV2RZ98PO0l%2FZLDINsV9tE5SBpBJORQaD9FmR%2F%2F57aEe8FC%2FjE2xSNJ0kqVZXr7ciiOCF%2FPD1I07zhyT2eKw4OZW1LvzSPKCPDe66q35SrI1KfIXOqS%2Ba3n4C6oeqoFsOzXhno6wMDkxVw1I8HFRjcTlYfIjNWijJoiaOJZEnIdtnmyWkzTbx3c7kj8mc2L%2BiIQxLZEwlvWGhOFi6jRl4CdlSpYx35IyZh%2FK2J%2BUKSnjvSVlZFWjoMzvn5RhPch9S8p4EmW4%2Bt%2FmhOv%2FbzmbeUX2O4VtEDoATwB2WcM3yobH%2Fq4aXgCwA8J7EEzYsBABfwo8zBoYAh%2FzCelCGy8cFxKoCQfnSiTEzsxBjh4kIM6RnEMhknFgezIOXA04gFiBA4EGpWlL2APG2S0nm9hntji9nKXZ%2FPsfq2RDuxtkfDVRyHNS%2FN1o%2F8MWQnnnxObvsn0%2BJy2DisQt61%2BmRmO3kYLpeF9O0qhIHts%2Bg4oC9Ru%2BZQld3IHY0JUEsiGQsVp8%2FVzTjBemsqBkD4mSoYjyJSmkqSiFopfGsC0bsJNgc9icfkhSSZQPhSRu04wESrIGcaE2KNl2PygNAIolG9IfDSjmqIACHYm6SBtQkIg5jUD5kLppLKBAEiU9j%2FdogIU8mUZg3I6qoWBAsAUOfvWN5An9zSSvl0hxkr%2F83bx4pdSxx6WeLAuKUgdbA%2BHlOZIXa10LXI4rg4t6OB51Y6al9%2BID32Q9gcXcGNZTOkIiAKn1X7RBlJNd8l80KwcwItdmFx2NAoCmtCdKkyVF3nRO6cyAETAvIplHqV%2FfWCdxzJ4P0mhG0uAQeG47LSz0rALNgW9E3%2BQQVK9XB5qBaZXPcmd8MRzDatHkzrwMN3xItljsyKVUtHsYGWmyIUp50KBZnOR0W5KMbT6FKxuiJcgMbdF2txXev4I7tXh9thwxG5sAHbv%2BdG3BaxcN5r7CzTTaE1k9DapuJ65jwY56wV3rEsc77unx4u8QxtNGteLBclmB2dAGAQZBwOUyLoNSAcBe2XMPPOcW5LLdJT%2BGyGXT4HnJUcplqJA8Utyxykfe0R%2B%2F26d3URxt2bZ3RAylp0FIMUFpbzMQeAHwQpUCpw0MPJcNppe9A5L5KlvP9rs2giR8fNSotW1aot4yZL0FLVOWu6Yo1wYpLltpnAks34va41J3B%2Bv%2FcHG0%2Fhu%2BRNOT6B2NqMVBpUfabDgSZaoIZQ2NippYnMoRgx2aFKrjqKOvuhSejUZvpB191gqaB9x2ovakadfyZqGM2nGB1jGlsJpom%2FcFLcKuOBXsFz15LWgRbBsH56xAZL7OarTRyfkvZwqn035YWVxpf82jRbSJGhr9eI93xsnj0V4oFYd%2FX2oHt8xbIubSe05tQQThUXHUKU38RGZ0HX%2F%2Byju8xuuak4ssO%2FaMZtPj3WS5Lo9XzHIiW5HlRLbCbjB12A03EEoeEv9rSsdxJTqlKjopOdlbo9uSRvf6afQB8gUp%2FBO5rOEWfEqOeB0%2BpXUZJPR6kDcQ%2FB%2FCymPl2%2BGBLbn27HpJZSTXzd4o3%2BqM0UNh%2F0fExhyun2z8NmyMeBjgcjaWptLIxqr4zi2y8QHeV2DjMcVz0fgzSR%2BLjYcXaSgY%2BZpFGkgRvrpNVtaZnRFY%2BdLczIvyAT2c3R1p2W2jDY9v%2BCndlnW0iZbHDE3zAJnYE66jJO0zsBFOab5PQszY4ymdIuYVWRdDLKVBliJ6ojoroCXr4sjRk69pNovS8HlOtixW9Eu0oRymAMBPnN7RmlFjM9ttyz0xyrSND3xURtamwHd%2B%2FjDnDxWSQqJ%2FJ7HFPDpUHaXCVzoO4Cqs8tAtk6hlzRMOWYA0RCwi6ivTqnSwD7CtulUHThvhVpclaeusvVHO7ADfYm1WX4VYXk%2BMrjagVT5%2Fz8DD6gDuG%2B%2BYlJoGlku0WX1AcDyKQkpAfqKvozDJPI8%2BiBWCRgv6ZGNyqtAMPylOEzGDYlICh9KT0tZUwbYTm%2BMnPiI4tlXEx3BmOY4e4juShQjNnnpGx5k0VxV7RYyJKdkYzdySjzEIpiVnY%2Fa3P5Uo9d7%2BBk98ArEm%2FFSSH6jcjrNZUs4xzTyA22GEvpHH0pYf7tCTBqZQXycVBOjzVFxF7HBsmDqRaO%2BPHCmX%2Fl4gsYTaQojtYShxRGMJXSdtLi74vdPgripOhpmeC9wzdVBMnIalvqQmEioT3BMQGGVjCrhqH59L3tv9bkO%2FYu5TLrlp86Tfhai%2Bu4YbjhVK8UaEkzlYOFUO53tJp4N921VA1r8WTSjtFksZNEknccH8PZ3r8tCp8RdLJ%2B6dNjD7b5SXrljIhAwz4dCIa7MHihrcoVPrmYwvtmcLG69J8PB5XoRrvZLoBsykMzWHrzWvzXe1klxNprQkz3qm4V8rhkzPU75Hl1jxVBmF6vhdacewgNGECZoPJlZOWzDUgIGGcOJjTPU6%2BAbKmC8WG%2B8lIkwPtyiPBssItw0hdPGnRHouWHPRvKeqA%2FoBZAQ6IyMg4t%2BxHGERAValGj9FhDYRoeuYAhUS0pH%2Bq4mJjjdpExSqCMoPICicM4LCwIImuLRE4Vn5gB65ofpUQx8afgoTTfaGJVbiD7U3pK%2BgXcne4O%2FRJkZuQHWdCM%2Bd%2B37Rax1mfjyrGcyrqkU%2F81H9MaUSa8rgPioD9w4L8fvhB9NU3mlNxb5Ag0291XRalZOnOHJWnS%2F0HU5FU6LZe8uKM0fNh8mDW%2Bd9xM%2FW8cCWNt6nl8fv%2FlfDj%2F%2B5ghX%2BDw%3D%3D"></iframe>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/30/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1427,7 +1656,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 19:22:37" itemprop="dateModified" datetime="2018-08-20T19:22:37+08:00">2018-08-20</time>
+                <time title="修改时间：2018-11-15 17:32:31" itemprop="dateModified" datetime="2018-11-15T17:32:31+08:00">2018-11-15</time>
               
             
           </span>
@@ -1945,7 +2174,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1982,7 +2211,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
