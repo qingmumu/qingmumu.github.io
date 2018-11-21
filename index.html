@@ -470,186 +470,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="freeman">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="青木的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="url">
-                  如何构建一个监控体系
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-13 23:43:52" itemprop="dateCreated datePublished" datetime="2018-11-13T23:43:52+08:00">2018-11-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-16 12:33:40" itemprop="dateModified" datetime="2018-11-16T12:33:40+08:00">2018-11-16</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/" class="leancloud_visitors" data-flag-title="如何构建一个监控体系">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
-<li>对于整个微服务系统而言。一套及时的报警通知，可视化监控，是必不可少的。</li>
-</ul>
-<h1 id="整体架构图"><a href="#整体架构图" class="headerlink" title="整体架构图"></a>整体架构图</h1><iframe frameborder="0" style="width:100%;height:681px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=%E7%9B%91%E6%8E%A7.xml#R7V1bc6M2FP41zLQP2QGBQDyCTbZ9aGdn0k63j9jINl1sPBjn0l9fSSAMkvASW85CmjwkshBC1vnO%2FYgY9mz7%2FLmI95vf8gRnBjCTZ8OeGwBYlmWSP7TnperxHVR1rIs0qQedOh7Sf3HdWd%2B3PqYJPnQGlnmelem%2B27nMdzu8LDt9cVHkT91hqzzrPnUfr7HU8bCMM7n3rzQpN1UvAt6p%2Fxecrjf8yZbrV1cW8fLbusiPu%2Fp5BrBX7Ke6vI35XPUXPWziJH9qddmRYc%2BKPC%2Br1vZ5hjO6t3zbqvvue6426y7wrhxyA6hueIyzY%2F3V8bHA32IDuBmZIFwUpLWmrXq95Qvfo025zUjLIteeNmmJH%2Fbxkl56IpAgfct8my7r64eyyL81O0m%2BZLjKd%2BV9vE0zCpAZGwrMh3h3IH9%2Be6gHPNQPo1Os0iyb5VlesIfbSYzRatlM3briLhFerJoFt7ei3p1HXJT4udVVb81nnG9xWbyQIfVV20efYHVTDWTHrQn3dIKFxYm5aUGCj4trJK6byU%2FUII2aIGri2BJxHvZFulvPsvyY3B1w8ZgusfV%2FJIxli4Sx7TckDBdT5ykDPijDWMZ6S8pYQyjjfFCGUcZ%2FS8rIqkZBmd8%2FKEN7oPeWlPElynD1vy8w1%2F9fCjrzBh8PCtsgcg00M5BHG4HJGj79XTX80ECuEd0b4YwOi6ARzA0f0QYCRoD4hGShrQeOCwnEhANLJRISd%2BFCVw8SIOdIzqEAyjhwfBkHngYcAKTAgUADZtpieoP53S3HuySgtjj5uMjy5bc%2FNumOdLfI%2BGqi4Oe0%2FNpq%2F00XQnjnzOYf8mOxxB2DCicd61%2BmRmu3oYLpeF%2BBs7hMH7s%2Bg4oC9RO%2B5ClZXENs4EkC2RTIWC2%2Bvq9txgtT2UCyh0TJUMbFGpfSVIRC8Utr2J4OOEiwaTZnGJJUEuVdIYnbNCOBkqxBPKANSo4zDEoXAMWWDen3BhRrVEABrkRdqA0oUMScRqC8S900FlBAiZK%2Bz3s0wEKeTCMwpqNqCBgg6ICDf%2FqCi5R8Z1zUSyQ4KV6%2Btj%2B8Uuo441JPtg1EqYPsC%2BHlu5IXa98KXK4ng4t4OD5xY%2BbMewmMwKI9oU3dGNrDHCERgMT6L7sgKvAh%2FTdesAGUyLXZRUbD0IBz0hNn6Zogb74kdKbACKkXkS7jLKgvbNMkofeHWbzAWdgEnrtOCw09q0DT8I3omzRB9Xp1RjswrfJZ7sxPpmvaHZrcWdfhhg%2FJV6sDvpaKzgAjI0t3WCkPWjRL0oJsS5rTzSdwpUO0BJmBI9rujsL7V3CnFq%2FPkSNmYxOgY9efniN47aLBPFS4WWZ3InugQdXvxPUs2FUvuG9d4njXOz9e%2FB7CeNKoVnyxXFZgNnKMEBlhyOUyYkGp0EA%2B67k3fHcKctnpkx%2BXyGXL5HnJUcploJA8UtyxykfekS9%2FOGZ3cRLv6bb3RAylu42IYILQ3qEg8EPDj1QKnDSQ4Xt0MPk4OCBZbPLt4njoIkjCx3uNWjuWLeotU9ZbwLZkuWuJcu0ixeUojTOB5QdRe1zqrrH%2Bmw8n67%2FlS7Q9icHRiFocVHqky4YjUaaKUNalUVELiVO5YrBDk0J1XXX0VZfCc%2BDojbSTz1pBs8FtL2rPmnYdbxbIqB0XaF1LCquJtvlQ0ELkiVOBYdGT14IWgq5x8D0rEFqvsxodeHb%2B65nC7bUfNjZX2p%2BLeBXv4pZGP13jnUn6eLIXmOII7pl28FjeElKX3ndrCyKMToqjTmmiJ7wg6%2FjzV97htx7Xnlxk2bFnNNse7y4vdHm8YpYTOoosJ3QUdoOlw26YQCj5kvhfWzqOK9EpVdFJycnBGt2RNLo%2FTKNfIF%2Bgwj%2BRyxqm4FNyxOvwKe3rIKHXg5xA8P8SVh4r314e2JJrz26XVIZy3exE%2BVZnjB4I%2Bz8iNuZw%2FWDjt2FjyMMA17OxNJVGNlbFd6bIxg28b8DGY4rnwvFnkt4XG19epKFg5FsWaUBF%2BGqarKwzOyOw8rW5mRflDXo4uz%2FSctjHOx7fCDKyLdt4F69PGZr2ATKxJ9rGaTZkYCuc0n6ehJixx1N6Rcwrsi6mWEoDbUX0RHVWQEvWxZWjJ5%2BzfBFn0fMS72ms6Jd4RzhMAYCfOL3jLaXGbnHYsz0xWdomMALIImtzI3B%2F%2Fjh%2FyK4KeXSgOkqFbnQcwFNY5ZHHkqis5glFNEAaQRoRDZRpVTI4MJCjulQHTlvhVo8maeusvclmdo3Apm1aXwVpXk%2BMrragxe6%2Fp%2BChdQD3rWfMmKYBbIkOrQ8IT0dRMAPkB%2Fp6CpOs76MPIIWg0YI%2B2ZicKzTDT4rTRNSgmDHgEHoS2loq2PZic%2FzEhxgljor4CCxsV5OecSULEVgD9YyOM2meKvYKKRMTslGaeYyPkRHOGWcj%2BjuYS5T60f4GT3waYk34uSR%2FL%2FnaSVHOIO2wP2e8sXgsXfnhXXrSwBLq66SCAH2eiqeIHY4NU2cS7b3IGW%2Fq3BZqCwFyLkOJKxpL8DZpc3HBPzoN7qniZIjqudD7Th0UFacR05fERIIswT0zQpM15gZX7eN2yRuO1VIw6fCk35WovruFG44USnEiwulsrU9bOHH%2FciTSqbFv%2BwrIhteiCaXdYimDJukkLpg%2Fp3ddPjw3%2FmrpxL3TFmb%2FiQvmikVUyFATDk6kNrvhv6tFjfnJ8R1h4zUJHj7Pi%2FBZrySagJl0Xc0hf13JSOSQp8mUluTZwDT8a8WQ5fvK5%2BgSK74qo1Adv2N2DA0YzaigmYJY0WbBEAMGmMKJjzHV66AJlDG%2FXmyMRERYPupQHl4sI7wuhODVrxIZuGDNRfO%2Bqg5oqjKCc44GGQEgf4%2FlCIsIkCrV%2BCEitIkIXccUiJCQjvTfTEz0PEmboFBFUKYqKDj%2FaBAUJhI0wbUlCs%2FKG%2FTIDdWrGobQ8EOYaLI3bLES%2F1J7Q3oL2o3sDf4cbWJkAqrrTHjuyhdd8dNY7WAeLw4dCWInmI%2FyVWJNGdyHLHDv0hB%2FEE1BU%2FnaNBV9Aw2y9FbTaVVOvuLIWXW%2BMHA5FS2JZj9aVvTmrgfJg3fK%2B5CfreOBrRvyvuJ0E83VsTda1OWzMxZJD3htS6eMSQLUNMpWFPJAglqvKFCUrXC35AZlK%2BTj6V81VBQ%2B%2FT8MO%2FoP"></iframe>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/11/13/How-to-use-Visual-Prometheus-Grafana-to-complete-visual-monitoring-of-SpringCloud/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/11/13/How-to-build-a-monitoring-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2122,13 +1942,191 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-ansible/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="freeman">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="青木的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/Kubernetes-v1-11-1-ansible/" itemprop="url">
+                  Kubernetes-v1.11.1-全自动ansible部署指南
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-07-31 18:24:23" itemprop="dateCreated datePublished" datetime="2018-07-31T18:24:23+08:00">2018-07-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-08-13 17:35:16" itemprop="dateModified" datetime="2018-08-13T17:35:16+08:00">2018-08-13</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/31/Kubernetes-v1-11-1-ansible/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/07/31/Kubernetes-v1-11-1-ansible/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/07/31/Kubernetes-v1-11-1-ansible/" class="leancloud_visitors" data-flag-title="Kubernetes-v1.11.1-全自动ansible部署指南">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><ul>
+<li>部署3节点的HA Master(v1.11.1目前最新版)+3个worker node 节点</li>
+<li>整个集群使用static pod方式启动包括</li>
+<li>使用ipvs替代iptables,实现svc网络</li>
+<li>容器部署flannel插件，coredns插件等相关插件</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/31/Kubernetes-v1-11-1-ansible/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
 
 
           </div>
@@ -2173,7 +2171,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
