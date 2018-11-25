@@ -124,7 +124,7 @@
 <meta property="og:image" content="https://www.qingmu.io/images/zuul/zuul3.png">
 <meta property="og:image" content="https://www.qingmu.io/images/zuul/zuul4.png">
 <meta property="og:image" content="https://www.qingmu.io/images/zuul/zuul5.png">
-<meta property="og:updated_time" content="2018-11-25T17:04:05.258Z">
+<meta property="og:updated_time" content="2018-11-25T17:04:59.301Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zuul源码分析(2)Filter分析">
 <meta name="twitter:description" content="前言在前一篇文件中我们分析了zuul对Filter请求了不同的阶段划分了多个生命周期即FilterType。接下来我们继续分析每一个FilterType的具体的Filter有哪些，他们都干了什么。 ZuulFilters运行流程图 前面我们分析完了zuul的一个生命周期，下面我们在来仔细的看一下每个生命周期具体使用到的Filter">
@@ -332,7 +332,7 @@
                 
               
 
-              <time title="创建时间：2018-11-26 23:19:17 / 修改时间：01:04:05" itemprop="dateCreated datePublished" datetime="2018-11-26T23:19:17+08:00">2018-11-26</time>
+              <time title="创建时间：2018-11-26 23:19:17 / 修改时间：01:04:59" itemprop="dateCreated datePublished" datetime="2018-11-26T23:19:17+08:00">2018-11-26</time>
             
 
             
@@ -452,7 +452,6 @@
 <li>在实际业务中我们一般采用直接继承该类的方式来轻松扩展它，完成业务相关异常的信息转换。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  RequestContext ctx = RequestContext.getCurrentContext();</span><br><span class="line">  <span class="comment">// 由于异常会向上抛出的同时会设置到ctx中，这里统一全局处理掉网关抛出的异常。</span></span><br><span class="line">  <span class="keyword">return</span> ctx.getThrowable() != <span class="keyword">null</span></span><br><span class="line">      &amp;&amp; !ctx.getBoolean(SEND_ERROR_FILTER_RAN, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>￥</p>
 
       
     </div>
