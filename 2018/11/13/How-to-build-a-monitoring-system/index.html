@@ -467,7 +467,7 @@
 <ul>
 <li>验证一下是否生效</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 获取所有服务</span></span><br><span class="line">freemandeMBP:opt freeman$ curl -i http://192.168.0.204:8761/v1/catalog/services</span><br><span class="line"></span><br><span class="line">&#123;"ACTIVITY-SERVICE":[],"ADDRESS-SERVICE":[],"ADMIN-ZUUL-GATEWAY":[],....&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取单个服务详细</span></span><br><span class="line">freemandeMBP:opt freeman$ curl -i http://192.168.0.204:8761/v1/catalog/service/ACTIVITY-SERVICE</span><br><span class="line"></span><br><span class="line">[&#123;</span><br><span class="line">	Address: "192.168.0.204",</span><br><span class="line">	Node: "ACTIVITY-SERVICE",</span><br><span class="line">	ServiceAddress: "192.168.0.204",</span><br><span class="line">	ServiceID: "4c53000573c9:activity-service:8044",</span><br><span class="line">	ServicePort: 8044,</span><br><span class="line">	NodeMeta: &#123;</span><br><span class="line">		management.port: "8044"</span><br><span class="line">	&#125;,</span><br><span class="line">	ServiceTags: []</span><br><span class="line">&#125;,....]</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 获取所有服务</span><br><span class="line">freemandeMBP:opt freeman$ curl -i http://192.168.0.204:8761/v1/catalog/services</span><br><span class="line"></span><br><span class="line">&#123;"ACTIVITY-SERVICE":[],"ADDRESS-SERVICE":[],"ADMIN-ZUUL-GATEWAY":[],....&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 获取单个服务详细</span><br><span class="line">freemandeMBP:opt freeman$ curl -i http://192.168.0.204:8761/v1/catalog/service/ACTIVITY-SERVICE</span><br><span class="line"></span><br><span class="line">[&#123;</span><br><span class="line">	Address: "192.168.0.204",</span><br><span class="line">	Node: "ACTIVITY-SERVICE",</span><br><span class="line">	ServiceAddress: "192.168.0.204",</span><br><span class="line">	ServiceID: "4c53000573c9:activity-service:8044",</span><br><span class="line">	ServicePort: 8044,</span><br><span class="line">	NodeMeta: &#123;</span><br><span class="line">		management.port: "8044"</span><br><span class="line">	&#125;,</span><br><span class="line">	ServiceTags: []</span><br><span class="line">&#125;,....]</span><br></pre></td></tr></table></figure>
 <ul>
 <li>通过之后我们就可以使用服务发现来机制来让prometheus自动发现我们的微服务，进行指标的采集了。</li>
 <li>prometheus.yml的配置如下，其中metrics_path是固定约定好的，server填写的是任意一台eureka的地址和端口</li>
@@ -652,7 +652,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -693,11 +693,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
