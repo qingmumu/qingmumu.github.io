@@ -116,24 +116,24 @@
 <meta name="keywords" content="zuul,微服务,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zuul源码分析(1)生命周期">
-<meta property="og:url" content="https://www.qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/index.html">
+<meta property="og:url" content="https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/index.html">
 <meta property="og:site_name" content="青木的博客">
 <meta property="og:description" content="前言 Zuul在Spring Cloud Netfilx 体系中扮演着接入者网关的角色。 本质上来说Zuul本身就是一系列的filters, 可以类比Servlet框架的Filter。按照生命周期我们可以分为四种类型（pre,route,post,err）分别对应请求过程。你可以从com.netflix.zuul.FilterProcessor类里面找到所有的生命周期处理。 为什么我们要去了解它？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://www.qingmu.io/images/zuul/zuul2.png">
-<meta property="og:image" content="https://www.qingmu.io/images/zuul/zuul1.png">
+<meta property="og:image" content="https://qingmu.io/images/zuul/zuul2.png">
+<meta property="og:image" content="https://qingmu.io/images/zuul/zuul1.png">
 <meta property="og:updated_time" content="2018-11-25T17:05:20.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zuul源码分析(1)生命周期">
 <meta name="twitter:description" content="前言 Zuul在Spring Cloud Netfilx 体系中扮演着接入者网关的角色。 本质上来说Zuul本身就是一系列的filters, 可以类比Servlet框架的Filter。按照生命周期我们可以分为四种类型（pre,route,post,err）分别对应请求过程。你可以从com.netflix.zuul.FilterProcessor类里面找到所有的生命周期处理。 为什么我们要去了解它？">
-<meta name="twitter:image" content="https://www.qingmu.io/images/zuul/zuul2.png">
+<meta name="twitter:image" content="https://qingmu.io/images/zuul/zuul2.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://www.qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/"/>
+  <link rel="canonical" href="https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/"/>
 
 
 
@@ -288,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/">
+    <link itemprop="mainEntityOfPage" href="https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -369,17 +369,6 @@
           
 
           
-          
-             <span id="/2018/11/15/Zuul-processing-flow-and-business-extension-point/" class="leancloud_visitors" data-flag-title="Zuul源码分析(1)生命周期">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
           
 
           
@@ -470,7 +459,7 @@
 <li><p>这个类有个关键的方法 <code>runFilters</code> 这个方法传入的的是一个filterType即要进行route类型，即会传入（pre,route,post,err）这些个类型按照上面分析的流程进行调用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">runFilters</span><span class="params">(String filterType)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (RequestContext.getCurrentContext().debugRouting()) &#123;</span><br><span class="line">        Debug.addRoutingDebug(<span class="string">"Invoking &#123;"</span> + sType + <span class="string">"&#125; type filters"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">boolean</span> bResult = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">// 这里是获取到同一个类型的Filter集合</span></span><br><span class="line">    List&lt;ZuulFilter&gt; list = FilterLoader.getInstance().getFiltersByType(sType);</span><br><span class="line">    <span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">            ZuulFilter zuulFilter = list.get(i);</span><br><span class="line">            <span class="comment">//这里又把调用委托到出去了 实际上我们可以看成 zuulFilter.run()；调用</span></span><br><span class="line">            Object result = processZuulFilter(zuulFilter);</span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">                bResult |= ((Boolean) result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>到处我们就将filter的请求调用周期分析完毕。<a href="https://qingmu.io/2018/11/26/Zuul-processing-flow-and-business-extension-point-2/" target="_blank" rel="noopener">下一篇</a>文章我们将具体分析到每个阶段具体的Filter都干了些什么。</p>
+<li><p>到处我们就将filter的请求调用周期分析完毕。<a href="https://qingmu.io/2018/11/26/Zuul-processing-flow-and-business-extension-point-2/">下一篇</a>文章我们将具体分析到每个阶段具体的Filter都干了些什么。</p>
 </li>
 </ul>
 
@@ -902,7 +891,7 @@
         avatar:'mm',
         meta:guest,
         pageSize:'10' || 10,
-        visitor: true
+        visitor: false
     });
   </script>
 

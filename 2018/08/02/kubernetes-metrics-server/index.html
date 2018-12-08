@@ -116,7 +116,7 @@
 <meta name="keywords" content="kubernetes,hpa,metrics-server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kubernetes全自动弹性伸缩组件">
-<meta property="og:url" content="https://www.qingmu.io/2018/08/02/kubernetes-metrics-server/index.html">
+<meta property="og:url" content="https://qingmu.io/2018/08/02/kubernetes-metrics-server/index.html">
 <meta property="og:site_name" content="青木的博客">
 <meta property="og:description" content="目标 使用容器完成 metrics-server 部署 演示 Horizontal Pod Autoscaling （pod 自动缩放）  部署 metrics-server 服务 Horizontal Pod Autoscaler（HPA）控制器用于实现基于CPU使用率进行自动Pod伸缩的功能。 HPA控制器基于Master的kube-controller-manager服务启动参数–horiz">
 <meta property="og:locale" content="zh-CN">
@@ -130,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="https://www.qingmu.io/2018/08/02/kubernetes-metrics-server/"/>
+  <link rel="canonical" href="https://qingmu.io/2018/08/02/kubernetes-metrics-server/"/>
 
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.qingmu.io/2018/08/02/kubernetes-metrics-server/">
+    <link itemprop="mainEntityOfPage" href="https://qingmu.io/2018/08/02/kubernetes-metrics-server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="freeman">
@@ -367,17 +367,6 @@
 
           
           
-             <span id="/2018/08/02/kubernetes-metrics-server/" class="leancloud_visitors" data-flag-title="kubernetes全自动弹性伸缩组件">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
 
           
 
@@ -408,7 +397,7 @@
 <li>在新版本的kubernetes中 Pod CPU使用率不在来源于heapster，而是来自于metrics-server</li>
 <li>官网原话是 <code>The --horizontal-pod-autoscaler-use-rest-clients is true or unset. Setting this to false switches to Heapster-based autoscaling, which is deprecated.</code><a id="more"></a></li>
 <li>yml 文件来自于github <a href="https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8+" target="_blank" rel="noopener">https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8+</a></li>
-<li>/etc/kubernetes/pki/front-proxy-ca.pem 文件来自于<a href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-%E5%85%A8%E8%87%AA%E5%8A%A8ansible%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/">部署kubernetes集群</a></li>
+<li>/etc/kubernetes/pki/front-proxy-ca.pem 文件来自于<a href="https://www.qingmu.io/2018/07/31/Kubernetes-v1-11-1-%E5%85%A8%E8%87%AA%E5%8A%A8ansible%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/" target="_blank" rel="noopener">部署kubernetes集群</a></li>
 <li>需要对yml文件进行修改才可使用 改动如下</li>
 <li>利用Flags-horizontal-pod-autoscaler-sync-period确定hPa对于Pods组指标的监控频率。默认的周期为30秒。</li>
 <li>两次扩展操作之间的默认间隔为3分钟，可以Flags来控制-horizontal-pod-autoscaler-upscale-delay</li>
@@ -859,7 +848,7 @@
         avatar:'mm',
         meta:guest,
         pageSize:'10' || 10,
-        visitor: true
+        visitor: false
     });
   </script>
 
